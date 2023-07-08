@@ -10,6 +10,8 @@ import wandb
 
 from dataset.Spk251_train import Spk251_train
 from dataset.Spk251_test import Spk251_test 
+from dataset.TIMIT_train import TIMIT_train
+from dataset.TIMIT_test import TIMIT_test 
 
 from model.AudioNet import AudioNet
 
@@ -32,8 +34,9 @@ def parser_args():
     parser.add_argument('-defense', default=None)
     parser.add_argument('-defense_param', default=None, nargs='+')
 
-    parser.add_argument('-label_encoder', default='./label-encoder-audionet-Spk251_test.txt')
-
+    #parser.add_argument('-label_encoder', default='./label-encoder-audionet-Spk251_test.txt')
+    parser.add_argument('-label_encoder', default='./label-encoder-audionet-TIMIT_test.txt')
+    
     parser.add_argument('-aug_eps', type=float, default=0)
     #parser.add_argument('-aug_eps', type=float, default=0.002)
     
@@ -176,7 +179,7 @@ def main(args):
     val_dataset = None
     val_loader = None
     if args.evaluate_per_epoch > 0:
-        val_dataset = Spk251_test(spk_ids, args.root, return_file_name=True, wav_length=None)
+        val_dataset = TIMIT_test(spk_ids, args.root, return_file_name=True, wav_length=None)
         test_loader_params = {
         'batch_size': 1,
         'shuffle': True,
@@ -186,7 +189,7 @@ def main(args):
         val_loader = DataLoader(val_dataset, **test_loader_params)
 
     # load train data
-    train_dataset = Spk251_train(spk_ids, args.root, wav_length=args.wav_length)
+    train_dataset = TIMIT_train(spk_ids, args.root, wav_length=args.wav_length)
     train_loader_params = {
         'batch_size': args.batch_size,
         'shuffle': True,
